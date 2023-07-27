@@ -51,6 +51,8 @@
             :minute-interval="15"
             v-model="currentNote.timeForNotification"
             @change="onChange($event)"
+            manual-input
+            hide-dropdown
           ></vue-timepicker>
         </label>
         <button type="submit" class="button" @click.prevent="handleSubmit">

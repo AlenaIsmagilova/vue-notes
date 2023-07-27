@@ -1,4 +1,5 @@
 import axios from "@/plugins/axios";
+import { baseUrl } from "~/types/constants";
 
 export const state = () => ({
   notes: [],
@@ -45,18 +46,8 @@ export const actions = {
 
   //получить все заметки
   getNotes({ commit }) {
-    return axios.get("http://localhost:1337/api/notes").then((res) => {
-      console.log(res.data.data);
-      const formattedData = res.data.data.map((el) => {
-        return {
-          ...el.attributes,
-          id: el.id,
-          timeForNotification:
-            el.attributes.timeForNotification?.slice(0, -4) || null,
-        };
-      });
-
-      commit("SET_NOTES", formattedData);
+    return axios.get(baseUrl).then((res) => {
+      commit("SET_NOTES", res.data);
     });
   },
 
@@ -67,81 +58,29 @@ export const actions = {
   //редактировать заметку
   updateNote({ commit }, note) {
     return axios
-      .put(
-        `http://localhost:1337/api/notes/${note.id}`,
-        {
-          data: {
-            title: note.title,
-            description: note.description,
-            author: note.author,
-            importance: note.importance,
-            isEveryDayNotification: note.isEveryDayNotification,
-            timeForNotification: note.timeForNotification,
-            ...note,
-          },
-        },
-        {
-          headers: { "Content-type": "application/json" },
-        }
-      )
+      .put(`${baseUrl}/${note.id}`, note, {
+        headers: { "Content-type": "application/json" },
+      })
       .then((res) => {
-        const formattedTime =
-          res.data.data.attributes.timeForNotification?.slice(0, -4);
-
-        const formattedData = {
-          ...res.data.data.attributes,
-          id: res.data.data.id,
-          timeForNotification: formattedTime,
-        };
-
-        commit("UPDATE_NOTES", formattedData);
+        commit("UPDATE_NOTES", res.data);
       });
   },
 
   //удалить заметку
   deleteNote({ commit }, note) {
-    return axios
-      .delete(`http://localhost:1337/api/notes/${note.id}`)
-      .then((res) => {
-        const formattedData = {
-          id: res.data.data.id,
-          ...res.data.data.attributes,
-        };
-
-        commit("DELETE_NOTE", formattedData);
-      });
+    return axios.delete(`${baseUrl}/${note.id}`).then((res) => {
+      commit("DELETE_NOTE", res.data);
+    });
   },
 
   //добавить новую заметку
   addNewNote({ commit }, note) {
     return axios
-      .post(
-        "http://localhost:1337/api/notes/",
-        {
-          data: {
-            title: note.title,
-            description: note.description,
-            author: note.author,
-            importance: note.importance,
-            isEveryDayNotification: note.isEveryDayNotification,
-            timeForNotification: note.timeForNotification,
-          },
-        },
-        {
-          headers: { "Content-type": "application/json" },
-        }
-      )
+      .post(baseUrl, note, {
+        headers: { "Content-type": "application/json" },
+      })
       .then((res) => {
-        const formattedTime =
-          res.data.data.attributes.timeForNotification?.slice(0, -4);
-
-        const formattedData = {
-          ...res.data.data.attributes,
-          id: res.data.data.id,
-          timeForNotification: formattedTime,
-        };
-
-        commit("ADD_NEW_NOTE", formattedData);
+        commit("ADD_NEW_NOTE", res.data);
       });
   },
 

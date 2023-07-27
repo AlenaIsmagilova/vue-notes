@@ -13,7 +13,7 @@
           <p>Важность: {{ note.importance }}</p>
           <p v-if="note.isEveryDayNotification === true">
             Уведомления отправляются каждый день в
-            <span>{{ note.timeForNotification }}</span>
+            <span>{{ note.timeForNotification.slice(0, -3) }}</span>
           </p>
           <button type="button" @click="openEditModal(note)" class="button">
             Редактировать
