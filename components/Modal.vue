@@ -53,6 +53,7 @@
             @change="onChange($event)"
             manual-input
             hide-dropdown
+            close-on-complete
           ></vue-timepicker>
         </label>
         <button type="submit" class="button" @click.prevent="handleSubmit">
@@ -72,6 +73,7 @@
 
 <script>
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
+import { Note } from "~/types/Note";
 
 export default {
   components: {
@@ -80,15 +82,7 @@ export default {
   data() {
     return {
       currentNote: this.mode.add
-        ? {
-            id: 0,
-            title: "",
-            description: "",
-            author: "",
-            importance: "default",
-            isEveryDayNotification: "",
-            timeForNotification: "00:00:00",
-          }
+        ? new Note()
         : { ...this.$store.state.currentNote },
     };
   },

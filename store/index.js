@@ -1,5 +1,9 @@
-import axios from "@/plugins/axios";
-import { baseUrl } from "~/types/constants";
+import {
+  addNewNoteApi,
+  deleteNoteApi,
+  getNotesApi,
+  updateNoteApi,
+} from "~/api/api";
 
 export const state = () => ({
   notes: [],
@@ -39,14 +43,14 @@ export const mutations = {
 };
 
 export const actions = {
-  //получить все заметки на стороне сервера
+  // получить все заметки на стороне сервера
   async nuxtServerInit({ dispatch }) {
     await dispatch("getNotes");
   },
 
   //получить все заметки
   getNotes({ commit }) {
-    return axios.get(baseUrl).then((res) => {
+    return getNotesApi().then((res) => {
       commit("SET_NOTES", res.data);
     });
   },
@@ -57,31 +61,23 @@ export const actions = {
 
   //редактировать заметку
   updateNote({ commit }, note) {
-    return axios
-      .put(`${baseUrl}/${note.id}`, note, {
-        headers: { "Content-type": "application/json" },
-      })
-      .then((res) => {
-        commit("UPDATE_NOTES", res.data);
-      });
+    return updateNoteApi(note).then((res) => {
+      commit("UPDATE_NOTES", res.data);
+    });
   },
 
   //удалить заметку
   deleteNote({ commit }, note) {
-    return axios.delete(`${baseUrl}/${note.id}`).then((res) => {
+    return deleteNoteApi(note).then((res) => {
       commit("DELETE_NOTE", res.data);
     });
   },
 
   //добавить новую заметку
   addNewNote({ commit }, note) {
-    return axios
-      .post(baseUrl, note, {
-        headers: { "Content-type": "application/json" },
-      })
-      .then((res) => {
-        commit("ADD_NEW_NOTE", res.data);
-      });
+    return addNewNoteApi(note).then((res) => {
+      commit("ADD_NEW_NOTE", res.data);
+    });
   },
 
   clearCurrentNote({ commit }) {
