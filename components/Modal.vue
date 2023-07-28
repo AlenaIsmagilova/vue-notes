@@ -8,20 +8,33 @@
         <label class="label">
           Название заметки
           <input
+            id="titleInput"
             class="input"
             type="text"
             v-model="currentNote.title"
-            @keyup.enter="handleKeyPressed"
+            @input="handleChangeInput($event)"
           />
         </label>
+        <div v-if="errors.length && !currentNote.title">
+          <p v-for="error in errors">{{ error }}</p>
+        </div>
         <label class="label">
           Содержание заметки
           <input class="input" type="text" v-model="currentNote.description" />
         </label>
         <label class="label">
           Автор заметки
-          <input class="input" type="text" v-model="currentNote.author" />
+          <input
+            id="authorInput"
+            class="input"
+            type="text"
+            v-model="currentNote.author"
+            @input="handleChangeInput($event)"
+          />
         </label>
+        <div v-if="errors.length && !currentNote.author">
+          <p v-for="error in errors">{{ error }}</p>
+        </div>
         <label class="label">
           Важность заметки:
           <select class="input" v-model="currentNote.importance">
@@ -84,6 +97,8 @@ export default {
       currentNote: this.mode.add
         ? new Note()
         : { ...this.$store.state.currentNote },
+      errors: [],
+      submitted: false,
     };
   },
   props: {
@@ -96,13 +111,39 @@ export default {
     onChange(eventData) {
       this.currentNote.timeForNotification = eventData.displayTime;
     },
+    handleChangeInput(event) {
+      if (event.target.value || this.submitted === false) {
+        this.errors = [];
+      } else {
+        event.target.id === titleInput &&
+          this.errors.push("Требуется указать название заметки");
+        event.target.id === authorInput &&
+          this.errors.push("Требуется указать автора заметки");
+      }
+    },
+    checkForm() {
+      if (this.currentNote.title && this.currentNote.author) {
+        this.$emit("closeModal");
+      }
+      this.errors = [];
+
+      if (!this.currentNote.title) {
+        this.errors.push("Требуется указать название заметки");
+      }
+      if (!this.currentNote.author) {
+        this.errors.push("Требуется указать автора заметки");
+      }
+    },
     handleSubmit() {
       if (this.mode.edit) {
+        this.submitted = true;
         this.$store.dispatch("updateNote", this.currentNote);
+        this.checkForm();
       } else {
+        this.submitted = true;
         this.$store.dispatch("addNewNote", this.currentNote);
+        this.checkForm();
       }
-      this.$emit("closeModal");
     },
   },
 };
