@@ -9,14 +9,19 @@
           Название заметки
           <input
             id="titleInput"
-            class="input"
+            :class="[errors.length && !currentNote.title ? inValid : valid]"
             type="text"
             v-model="currentNote.title"
             @input="handleChangeInput($event)"
           />
         </label>
-        <div v-if="errors.length && !currentNote.title">
-          <p v-for="error in errors">{{ error }}</p>
+        <div
+          v-if="errors.length && !currentNote.title"
+          class="invalidMsgContainer"
+        >
+          <p v-for="error in errors" class="invalidMessage">
+            {{ error.titleError }}
+          </p>
         </div>
         <label class="label">
           Содержание заметки
@@ -26,14 +31,19 @@
           Автор заметки
           <input
             id="authorInput"
-            class="input"
+            :class="[errors.length && !currentNote.author ? inValid : valid]"
             type="text"
             v-model="currentNote.author"
             @input="handleChangeInput($event)"
           />
         </label>
-        <div v-if="errors.length && !currentNote.author">
-          <p v-for="error in errors">{{ error }}</p>
+        <div
+          v-if="errors.length && !currentNote.author"
+          class="invalidMsgContainer"
+        >
+          <p v-for="error in errors" class="invalidMessage">
+            {{ error.authorError }}
+          </p>
         </div>
         <label class="label">
           Важность заметки:
@@ -99,6 +109,8 @@ export default {
         : { ...this.$store.state.currentNote },
       errors: [],
       submitted: false,
+      inValid: "invalidInput",
+      valid: "input",
     };
   },
   props: {
@@ -111,16 +123,21 @@ export default {
     onChange(eventData) {
       this.currentNote.timeForNotification = eventData.displayTime;
     },
+
     handleChangeInput(event) {
       if (event.target.value || this.submitted === false) {
         this.errors = [];
       } else {
         event.target.id === titleInput &&
-          this.errors.push("Требуется указать название заметки");
+          this.errors.push({
+            titleError: "Требуется указать название заметки",
+          });
+
         event.target.id === authorInput &&
-          this.errors.push("Требуется указать автора заметки");
+          this.errors.push({ authorError: "Требуется указать автора заметки" });
       }
     },
+
     checkForm() {
       if (this.currentNote.title && this.currentNote.author) {
         this.$emit("closeModal");
@@ -128,12 +145,14 @@ export default {
       this.errors = [];
 
       if (!this.currentNote.title) {
-        this.errors.push("Требуется указать название заметки");
+        this.errors.push({ titleError: "Требуется указать название заметки" });
       }
+
       if (!this.currentNote.author) {
-        this.errors.push("Требуется указать автора заметки");
+        this.errors.push({ authorError: "Требуется указать автора заметки" });
       }
     },
+
     handleSubmit() {
       if (this.mode.edit) {
         this.submitted = true;
@@ -161,6 +180,7 @@ export default {
 
 .container {
   width: 400px;
+  min-height: 575px;
   padding: 30px;
   margin: 0 auto;
   position: relative;
@@ -201,11 +221,24 @@ export default {
 .label {
   display: flex;
   flex-direction: column;
-  margin: 15px 0;
+  margin: 12px 0 0;
 }
 
 .input {
-  padding: 7px 15px;
+  padding: 5px 15px;
+}
+
+.invalidInput {
+  border-color: red;
+  padding: 5px 15px;
+}
+
+.invalidMsgContainer {
+  color: red;
+}
+
+.invalidMessage {
+  margin: 0;
 }
 
 .button {
