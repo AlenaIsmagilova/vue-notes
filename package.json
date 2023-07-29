@@ -2,7 +2,7 @@
   "name": "vue-notes",
   "version": "1.0.0",
   "private": true,
-  "homepage": "http://alenaismagilova.github.io/vue-notes",
+  "homepage": "http://alenaismagilova.github.io/vue-notes/",
   "scripts": {
     "dev": "nuxt",
     "predeploy": "nuxt generate",
