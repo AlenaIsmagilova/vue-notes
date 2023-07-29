@@ -9,20 +9,14 @@
           Название заметки
           <input
             id="titleInput"
-            :class="[errors.length && !currentNote.title ? inValid : valid]"
+            :class="[!currentNote.title && submitted ? inValid : valid]"
             type="text"
             v-model="currentNote.title"
-            @input="handleChangeInput($event)"
           />
         </label>
-        <div
-          v-if="errors.length && !currentNote.title"
-          class="invalidMsgContainer"
-        >
-          <p v-for="error in errors" class="invalidMessage">
-            {{ error.titleError }}
-          </p>
-        </div>
+        <p v-if="!currentNote.title && submitted" class="invalidMessage">
+          {{ titleError }}
+        </p>
         <label class="label">
           Содержание заметки
           <input class="input" type="text" v-model="currentNote.description" />
@@ -31,20 +25,14 @@
           Автор заметки
           <input
             id="authorInput"
-            :class="[errors.length && !currentNote.author ? inValid : valid]"
+            :class="[!currentNote.author && submitted ? inValid : valid]"
             type="text"
             v-model="currentNote.author"
-            @input="handleChangeInput($event)"
           />
         </label>
-        <div
-          v-if="errors.length && !currentNote.author"
-          class="invalidMsgContainer"
-        >
-          <p v-for="error in errors" class="invalidMessage">
-            {{ error.authorError }}
-          </p>
-        </div>
+        <p v-if="!currentNote.author && submitted" class="invalidMessage">
+          {{ authorError }}
+        </p>
         <label class="label">
           Важность заметки:
           <select class="input" v-model="currentNote.importance">
@@ -107,7 +95,8 @@ export default {
       currentNote: this.mode.add
         ? new Note()
         : { ...this.$store.state.currentNote },
-      errors: [],
+      titleError: "Требуется указать название заметки",
+      authorError: "Требуется указать автора заметки",
       submitted: false,
       inValid: "invalidInput",
       valid: "input",
@@ -124,32 +113,9 @@ export default {
       this.currentNote.timeForNotification = eventData.displayTime;
     },
 
-    handleChangeInput(event) {
-      if (event.target.value || this.submitted === false) {
-        this.errors = [];
-      } else {
-        event.target.id === titleInput &&
-          this.errors.push({
-            titleError: "Требуется указать название заметки",
-          });
-
-        event.target.id === authorInput &&
-          this.errors.push({ authorError: "Требуется указать автора заметки" });
-      }
-    },
-
     checkForm() {
       if (this.currentNote.title && this.currentNote.author) {
         this.$emit("closeModal");
-      }
-      this.errors = [];
-
-      if (!this.currentNote.title) {
-        this.errors.push({ titleError: "Требуется указать название заметки" });
-      }
-
-      if (!this.currentNote.author) {
-        this.errors.push({ authorError: "Требуется указать автора заметки" });
       }
     },
 
@@ -226,19 +192,18 @@ export default {
 
 .input {
   padding: 5px 15px;
+  outline: none;
 }
 
 .invalidInput {
   border-color: red;
   padding: 5px 15px;
-}
-
-.invalidMsgContainer {
-  color: red;
+  outline: none;
 }
 
 .invalidMessage {
   margin: 0;
+  color: red;
 }
 
 .button {
