@@ -2,10 +2,11 @@
   "name": "vue-notes",
   "version": "1.0.0",
   "private": true,
+  "homepage": "http://alenaismagilova.github.io/vue-notes",
   "scripts": {
     "dev": "nuxt",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
+    "predeploy": "nuxt generate",
+    "deploy": "gh-pages -d dist",
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate"
@@ -13,7 +14,6 @@
   "dependencies": {
     "axios": "^1.4.0",
     "core-js": "^3.25.3",
-    "gh-pages": "^5.0.0",
     "nuxt": "^2.15.8",
     "vue": "^2.7.10",
     "vue-server-renderer": "^2.7.10",
@@ -22,6 +22,7 @@
   },
   "devDependencies": {
     "@nuxt/types": "^2.15.8",
-    "@nuxt/typescript-build": "^2.1.0"
+    "@nuxt/typescript-build": "^2.1.0",
+    "gh-pages": "^5.0.0"
   }
 }
