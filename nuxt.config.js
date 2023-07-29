@@ -2,7 +2,7 @@ export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   mode: "static",
   router: {
-    base: "/your-github-repository-name/",
+    base: "/vue-notes/",
   },
   head: {
     title: "vue-notes",
