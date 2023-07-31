@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nuxt",
     "predeploy": "nuxt generate",
-    "deploy": "gh-pages -d .nuxt",
+    "deploy": "gh-pages -d dist",
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate"
