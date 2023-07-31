@@ -44,9 +44,9 @@ export const mutations = {
 
 export const actions = {
   // получить все заметки на стороне сервера
-  // async nuxtServerInit({ dispatch }) {
-  //   await dispatch("getNotes");
-  // },
+  async nuxtServerInit({ dispatch }) {
+    await dispatch("getNotes");
+  },
 
   //получить все заметки
   getNotes({ commit }) {
