@@ -9,5 +9,8 @@ import NotesList from "~/components/NotesList.vue";
 export default Vue.extend({
   name: "IndexPage",
   components: { NotesList },
+  created() {
+    this.$store.dispatch("getNotes");
+  },
 });
 </script>
