@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "homepage": "http://alenaismagilova.github.io/vue-notes/",
+  "engines": {
+    "node": "16.18.0"
+  },
   "scripts": {
     "dev": "nuxt",
     "predeploy": "nuxt generate",
