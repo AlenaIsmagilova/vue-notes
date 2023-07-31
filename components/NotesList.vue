@@ -44,6 +44,9 @@ export default {
       },
     };
   },
+  created() {
+    this.$store.dispatch("getNotes");
+  },
   methods: {
     closeModal() {
       this.mode.add = false;

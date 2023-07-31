@@ -21,6 +21,7 @@
     "vue2-timepicker": "^1.1.6"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@nuxt/types": "^2.15.8",
     "@nuxt/typescript-build": "^2.1.0",
     "gh-pages": "^5.0.0"
